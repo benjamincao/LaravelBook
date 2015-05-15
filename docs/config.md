@@ -97,12 +97,12 @@ composer的全局配置文件位于 `C:\Users\benjamincao\AppData\Roaming\Compos
 putty是免费的ssh客户端，登录homestead虚拟机的利器。  
 点击[这里](http://the.earth.li/~sgtatham/putty/latest/x86/putty-0.64-installer.exe)下载。  
 
-<h2 id="homesteadSoftware">2. Homestead 相关软件安装</h2>>
+<h2 id="homesteadSoftware">2. Homestead 相关软件安装</h2>
 
 <h3 id="vagrant">2.1 vagrant  </h3>
 vagrant是一个虚拟机管理工具。在添加虚拟机后，可以启动虚拟机的镜像，如果出现错误，可以随时销毁重建开发环境。  
 
-从[这里](http://www.vagrantup.com/downloads.html)下载。下载后直接安装。  
+从[这里](http://www.vagrantup.com/downloads.html) 下载。下载后直接安装。  
 vagrant安装确认：
 
 	C:\>vagrant --version
@@ -111,7 +111,7 @@ vagrant安装确认：
 <h3 id="virtualbox">2.2 virtualbox</h3>
 virtualbox是作为vagrant的一个provider，安装后，在启动homestead时候，vagrant会自动启动virtualbox。  
 
-从[这里](https://www.virtualbox.org/wiki/Downloads)下载，下载直接安装。   
+从[这里](https://www.virtualbox.org/wiki/Downloads) 下载，下载直接安装。   
 
 
 <h3 id="homestead">2.3 homestead</h3>
