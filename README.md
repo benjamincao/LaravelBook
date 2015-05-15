@@ -1,4 +1,4 @@
-Laravel框架学习记录
+Laravel Book
 ======================
 
 ## 1. [开发环境配置](./docs/config.md)
