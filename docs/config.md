@@ -96,6 +96,8 @@ composer的全局配置文件位于 `C:\Users\benjamincao\AppData\Roaming\Compos
 <h3 id="putty">1.4 putty</h3>
 putty是免费的ssh客户端，登录homestead虚拟机的利器。  
 点击[这里](http://the.earth.li/~sgtatham/putty/latest/x86/putty-0.64-installer.exe)下载。  
+**注意** 如果不使用putty登录，用homestead ssh登录，也可以。
+
 
 <h2 id="homesteadSoftware">2. Homestead 相关软件安装</h2>
 
@@ -144,7 +146,7 @@ homestead将会被安装在`C:\Users\benjamincao\AppData\Roaming\Composer\vendor
 <h3 id="keygen">3.2 生成rsa key  </h3>
 通过ssh登录homestead需要这个。  
 
-打开Git Bash，这是一个比较完备的Windows下的shell工具。    
+打开Git Bash，这是一个比较完备的Windows下的shell工具。在运行homestead的命令的时候都需要在这个bash中运行。    
 
 
 	ssh-keygen.exe  -t rsa -C "caojianghui@carnetmotor.com"
@@ -208,6 +210,8 @@ homestead将会被安装在`C:\Users\benjamincao\AppData\Roaming\Composer\vendor
 	
 	homestead ssh
 
+我这里在使用`homestead ssh`时，总是会出现屏幕卡死的情况，推荐使用putty登录。    
+初始用户名密码  `vagrant / vagrant`  
 
 
 <h4 id="mysqlLogin">3.4 1 mysql密码  </h4>
