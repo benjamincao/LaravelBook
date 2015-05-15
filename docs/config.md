@@ -2,25 +2,25 @@
  集成开发环境配置  
 ===============================
 
-* [1. 本地环境设置](#本地环境设置)
-	*[1.1 编辑器](#1.1 编辑器)
-* [2. 块级元素](#blockElement)
-    * [2.1 标题](#header)
-    * [2.2 换行](#lineBreak)
-    * [2.3 段落](#paragraph)
-    * [2.4 引用](#quote)
-    * [2.5 列表](#list)
-    * [2.6 代码块](#codeBlock)
-    * [2.7 分割线](#horizontalRule)
-* [3. 行内元素](#spanElement)
-    * [3.1 强调](#emphasis)
-    * [3.2 链接](#link)
-        * [3.2.1 自动链接](#autoLink)
-        * [3.2.2 行内链接(inline)](#inlineLink)
-        * [3.2.3 引用链接(reference)](#referenceLink)
-    * [3.3 图片](#image)
-* [4. 转义符号 \"\\\"](#backSlash)
-* [5. 表](#table)
+* [1. 本地环境设置](#localConfigig)
+	* [1.1 编辑器](#sublimetext)
+	* [1.2 php](#php)
+	* [1.3 composer](#composer)
+	* [1.4 putty](#putty)
+* [2. Homestead 相关软件安装](#homesteadSoftware)
+    * [2.1 vagrant](#vagrant)
+    * [2.2 virtualbox](#virtualbox)
+    * [2.3 homestead](#homestead)
+    * [2.4 Git](#git)
+* [3. 环境启动](#startup)
+    * [3.1 使用vagrant添加homestead镜像文件](#vagrantImage)
+    * [3.2 生成rsa key](#keygen)
+    * [3.3 配置并启动homestead](#configHomestead)
+    * [3.4 登录说明](#login)
+    	* [3.4.1 ssh登录  ](#sshLogin)
+    	* [3.4 1 mysql密码](#mysqlLogin)
+* [4. 命令详解](#command)
+	* [4.1 homestead命令](#homesteadCommand)
    
 * * *
 
@@ -31,13 +31,13 @@ homestead是跨平台的，可以在windows，Linux，Mac上运行，其中集�
 本文档是针对windows环境下homestead的配置运行。
 
 
-## 1. 本地环境设置  
+<h2 id="localConfig">1. 本地环境设置</h2>
 
-### 1.1 编辑器  
+<h3 id="sublimetext">1.1 编辑器</h3>
 建议使用[sublime Text 3](http://www.sublimetext.com/3)，会有单独文档来说明如何使用Sublime Text高效开发php。
 
 
-### 1.2 php  
+<h3 id="php">1.2 php</h3>
 运行composer必须要有PHP，建议使用最新版本的发行版php，目前最新版本5.6.8。php windows版本分为32位和64位的，64位目前仍处于试验阶段，我们选择稳定的32位版本。其中又分为thread safe和not thread safe版本，在web开发中我们选择not thread safe版本，点击[这里](http://windows.php.net/downloads/releases/php-5.6.8-nts-Win32-VC11-x86.zip)下载。   
 **注意 php windows版本使用VC11编译，系统需要有Visual C++ Redistributable for Visual Studio 2012 x86 or x64，如果系统没有安装这个包，请点击[这里](http://www.microsoft.com/en-us/download/details.aspx?id=30679)下载安装。**  
 （1） 下载压缩包解压到C盘根目录  
@@ -51,7 +51,7 @@ homestead是跨平台的，可以在windows，Linux，Mac上运行，其中集�
 	Zend Engine v2.6.0, Copyright (c) 1998-2015 Zend Technologies  
 
 
-### 1.3 composer  
+<h3 id="composer">1.3 composer</h3>
 点击[这里](https://getcomposer.org/Composer-Setup.exe)下载。     
 安装完成后，打开console，运行`composer --version`确认安装成功。  
 
@@ -93,13 +93,13 @@ composer的全局配置文件位于 `C:\Users\benjamincao\AppData\Roaming\Compos
 
 **在开发laravel项目时，也可以在当前项目的composer.json文件中添加这些国内镜像，可以加快对包的更新**
 
-### 1.4 putty
+<h3 id="putty">1.4 putty</h3>
 putty是免费的ssh客户端，登录homestead虚拟机的利器。  
 点击[这里](http://the.earth.li/~sgtatham/putty/latest/x86/putty-0.64-installer.exe)下载。  
 
-## 2. Homestead 相关软件安装
+<h2 id="homesteadSoftware">2. Homestead 相关软件安装</h2>>
 
-### 2.1 vagrant  
+<h3 id="vagrant">2.1 vagrant  </h3>
 vagrant是一个虚拟机管理工具。在添加虚拟机后，可以启动虚拟机的镜像，如果出现错误，可以随时销毁重建开发环境。  
 
 从[这里](http://www.vagrantup.com/downloads.html)下载。下载后直接安装。  
@@ -108,28 +108,28 @@ vagrant安装确认：
 	C:\>vagrant --version
 	Vagrant 1.7.2
 
-### 2.2 virtualbox
+<h3 id="virtualbox">2.2 virtualbox</h3>
 virtualbox是作为vagrant的一个provider，安装后，在启动homestead时候，vagrant会自动启动virtualbox。  
 
 从[这里](https://www.virtualbox.org/wiki/Downloads)下载，下载直接安装。   
 
 
-### 2.3 homestead
+<h3 id="homestead">2.3 homestead</h3>
 直接使用composer安装  
 
 	composer global require "laravel/homestead=~2.0"
 
 homestead将会被安装在`C:\Users\benjamincao\AppData\Roaming\Composer\vendor\laravel\homestead`
 
-### 2.4 Git  
+<h3 id="git">2.4 Git  </h3>
 安装Git的目的是使用Git Bash，homestead的启动脚本是bash shell，windows下面使用Git Bash正好。   
 
 点击[这里](http://www.git-scm.com/download/win)下载，然后安装。安装完毕就可以使用了。   
 
 
-## 3. 环境启动
+<h2 id="startup">3. 环境启动</h2>
 
-### 3.1 使用vagrant添加homestead镜像文件  
+<h3 id="vagrantImage">3.1 使用vagrant添加homestead镜像文件  </h3>
 
 	vagrant box add laravel/homestead
 
@@ -141,7 +141,7 @@ homestead将会被安装在`C:\Users\benjamincao\AppData\Roaming\Composer\vendor
 	vagrant box add laravel/homestead file:///d:/hbox/virtualbox.box
 
 
-### 3.2 生成rsa key  
+<h3 id="keygen">3.2 生成rsa key  </h3>
 通过ssh登录homestead需要这个。  
 
 打开Git Bash，这是一个比较完备的Windows下的shell工具。    
@@ -150,7 +150,7 @@ homestead将会被安装在`C:\Users\benjamincao\AppData\Roaming\Composer\vendor
 	ssh-keygen.exe  -t rsa -C "caojianghui@carnetmotor.com"
 
 
-### 3.2 配置并启动homestead
+<h3 id="configHomestead">3.3 配置并启动homestead</h3>
 
 	
 	cd AppData/Roaming/Composer/vendor/laravel/homestead/
@@ -201,21 +201,21 @@ homestead将会被安装在`C:\Users\benjamincao\AppData\Roaming\Composer\vendor
 
 
 
-## 3.4 登录说明
+<h3 id="login">3.4 登录说明</h3>
 登录主要包括ssh的登录和mysql的登录。 
 
-## 3.4.1 ssh登录  
+<h4 id="sshLogin">3.4.1 ssh登录  </h4>
 	
 	homestead ssh
 
 
 
-## 3.4 1 mysql密码  
+<h4 id="mysqlLogin">3.4 1 mysql密码  </h4>
 `homestead  / secret`  
 `root / secret`  
 
 
-## 3.5 高级配置
+<h3 id="advanced">3.5 高级配置</h3>
 
 ### 3.5 增加新的网站
 * 方法一  
@@ -228,9 +228,9 @@ ssh登录homestead后，执行serve命令。
 serve domain.app /home/vagrant/Code/path/to/public/directory 80
 ```
 
-# 4 命令详解
+<h2 id="command">4. 命令详解</h2>
 
-## 4.1 homestead命令
+<h3 id="homesteadCommand">4.1 homestead命令</h3>
 
 
  命令      |    解释
@@ -251,4 +251,24 @@ serve domain.app /home/vagrant/Code/path/to/public/directory 80
  update	   |   	更新homestead镜像  
 
 
+******************************************
 
+* [1. 本地环境设置](#localConfigig)
+	* [1.1 编辑器](#sublimetext)
+	* [1.2 php](#php)
+	* [1.3 composer](#composer)
+	* [1.4 putty](#putty)
+* [2. Homestead 相关软件安装](#homesteadSoftware)
+    * [2.1 vagrant](#vagrant)
+    * [2.2 virtualbox](#virtualbox)
+    * [2.3 homestead](#homestead)
+    * [2.4 Git](#git)
+* [3. 环境启动](#startup)
+    * [3.1 使用vagrant添加homestead镜像文件](#vagrantImage)
+    * [3.2 生成rsa key](#keygen)
+    * [3.3 配置并启动homestead](#configHomestead)
+    * [3.4 登录说明](#login)
+    	* [3.4.1 ssh登录  ](#sshLogin)
+    	* [3.4 1 mysql密码](#mysqlLogin)
+* [4. 命令详解](#command)
+	* [4.1 homestead命令](#homesteadCommand)
