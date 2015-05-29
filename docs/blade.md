@@ -4,6 +4,7 @@ Laravel Blade
 * [1. Blade模板](#templating)
 * [2. Blade控制结构](#control)
 * [3. 服务注入](#serviceInject)
+* [4. FAQ](#faq)
 
 <h2 id="templating">1. Blade模板</h2>
 Blade是Laravel提供的简单但是功能强大的模版引擎。跟控制器布局不同，Blade是模版继承(template inheritance)和区块(section)驱动的。所有的模板文件使用`.balde.php`作为后缀。    
@@ -56,7 +57,7 @@ Blade是Laravel提供的简单但是功能强大的模版引擎。跟控制器�
 	@section('title', 'Page Title')
 
 	@section('sidebar')
-		@@parent
+		@parent
 		<p>This is appended to the master sidebar</p>
 	@stop
 
@@ -64,7 +65,7 @@ Blade是Laravel提供的简单但是功能强大的模版引擎。跟控制器�
 		<p>This is my body content</p>
 	@stop
 
-注意，扩展(extends)了一个Blade布局的视图(view)只是简单的重写了布局中的section。可以使用section中`@@parent`指令将布局的内容添加到子视图中。在侧边栏或者页脚中可以使用这种技巧。   
+注意，扩展(extends)了一个Blade布局的视图(view)只是简单的重写了布局中的section。可以使用section中`@parent`_(文档中说这里使用`@@parent`,实际测试，使用一个@即可)_，指令将布局的内容添加到子视图中。在侧边栏或者页脚中可以使用这种技巧。   
 有时候，无法确定一个区块是否被定义，可以传递一个默认的值给`yield`指令。  
 
 	@yield('section', 'Default content')
@@ -79,7 +80,7 @@ Blade是Laravel提供的简单但是功能强大的模版引擎。跟控制器�
 	Hello, {{ $name }}.
 	The current UNIX timestamp is {{ time() }}
 
-两个大括号抱起来的内容可以被转化输出。
+两个大括号抱起来的内容可以被转义输出。
 
 ### 2.2 确认是否存在后输出值
 有时候，你想输出一个变量值，但是你不确认这个变量是否已经赋值，可以使用这样的语法。
@@ -93,7 +94,7 @@ Blade是Laravel提供的简单但是功能强大的模版引擎。跟控制器�
 	
 	@{{ This will not be processed by Blade. }}
 
-如果你不需要Blade转义，虽然这样并不安全，那么可以使用如下语法：
+如果你不需要Blade转义——虽然这样并不安全——可以使用如下语法：
 
 	{!! $name !!}
 
@@ -168,3 +169,133 @@ Blade是Laravel提供的简单但是功能强大的模版引擎。跟控制器�
 	<div>
 		Monthly revenue: {{ $metrics->monthlyRevenue() }}.
 	</div>
+
+
+<h2 id="faq">4. FAQ</h2>
+
+### 4.1 yield 和 section的区别
+yield和section都可以预定义占位的块。却别在于：
+*在父模板中，可以使用yield和section来设置占位符，但是在子模板中，不可以使用yield来输出内容。否则会被当作新的占位符。  
+
+#### yield可以设置默认值，当子模板中没有设置值的时候，则输出默认值。section则不可以设置默认值。        
+	
+	{{-- layout.master --}}
+	@yield('title', 'Default Title')
+
+	{{-- index --}}
+	@extends('layout.master')
+	
+
+
+输出`Default Title`.
+
+
+#### yield只能替换不能扩展，即不能使用`@parent`来扩展，而section可以替换和扩展。   
+
+	
+	{{-- layout.master --}}
+	@yield('title', 'Default Title')
+
+	{{-- index --}}
+	@extends('layout.master')
+	@section('title')
+	@parent
+	New Title
+	@stop
+
+
+
+只会输出`New Title`。   
+
+	{{-- layout.master --}}
+	@section('title')
+	Parent title 
+	@show
+
+	{{-- index --}}
+	@extends('layout.master')
+	@section('title')
+	@parent
+	New Title
+	@stop
+
+输出 `Parent title New Title`
+
+
+### 4.2 section中指令@show, @stop, @append, @overwrite, @parent的功能
+
+#### @show和@stop的区别   
+@show表示到此处将section的内容输出到页面。@stop只是进行内容解析，不再处理模板中对该section的处理，除非用@override覆盖或者使用@append来附加。一般来说，在定义section时，用@show，在扩展或者替换时，使用@stop。  
+
+
+#### @append和@overwirte的却别   
+@append可以在已经使用@stop结束的section后，附加内容。   
+
+	@extends('layout.base')
+
+
+
+	@section('sidebar')
+		<p>this is line one.</p>
+	@stop
+	
+	@section('sidebar')
+		<p>this is line three</p>
+	@show
+	
+	@section('sidebar')
+		<p>thi is line two</p>
+	@append
+	
+	@section('sidebar')
+		<p>this is line three</p>
+	@show
+	
+	
+	@section('sidebar')
+		<p>this is not shown</p>
+	@stop
+
+输出：
+
+	this is line one.
+
+	this is line one.
+
+	thi is line two
+
+
+@overwrite则是对使用@stop结束的section进行覆盖。
+
+	@extends('layout.base')
+
+
+
+	@section('sidebar')
+		<p>this is line one.</p>
+	@stop
+	
+	@section('sidebar')
+		<p>this is line three</p>
+	@show
+	
+	@section('sidebar')
+		<p>thi is line two</p>
+	@overwrite
+	
+	@section('sidebar')
+		<p>this is line three</p>
+	@show
+	
+	
+	@section('sidebar')
+		<p>this is not shown</p>
+	@stop
+
+输出：  
+
+	this is line one.
+
+	thi is line two
+	
+	
