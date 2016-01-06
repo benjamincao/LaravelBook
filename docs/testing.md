@@ -74,6 +74,18 @@ Laravel提供了非常简便的方法来发起HTTP请求，检查输出，甚至
              ->seePageIs('/about-us');
     }
 ```
+   
+判断点击结果？
+
+```php
+    public function test_cta_link_functions()
+    {
+        $this->visit('/sales-page')
+            ->click('Try it now!')
+            ->see('Sign up for trial')
+            ->onPage('trial-signup');
+    }
+```
 
 #### 2.1.2 处理表单（Working with Forms）
 Laravel提供了许多方法来处理表单，`type`,`select`,`check`,`attach`和`press`方法允许我们可以跟表单的input交互，假设应用注册表单如下：
@@ -108,7 +120,18 @@ Laravel提供了许多方法来处理表单，`type`,`select`,`check`,`attach`�
              ->press('Register')
              ->seePageIs('/dashboard');
     }
+```
+   
+使用`submitForm()`方法一次提交一个表格。
 
+```php
+    public function test_login_form()
+    {
+        $this->visit('/login')
+            ->submitForm('Log In', ['email' => 'me@me.com', 'password' => 'secret'])
+            ->see('Welcome!')
+            ->onPage('dashboard');
+    }
 
 ```
 

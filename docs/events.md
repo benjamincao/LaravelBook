@@ -93,7 +93,7 @@ Laravel的事件机制提供了一种简单的观察者模式实现，我们可�
             *  @param  PodcastWasPurchased  $event
             *  @return void
             */ 
-        <p> </p>ublic function handle(<PodcastWasPurchas>    </PodcastWasPurchas>ed  <1>  </1>event)    
+        public function handle(PodcastWasPurchased event)    
         {   
             // Access the podcast using <1event->   </1event->podcast...
         }
