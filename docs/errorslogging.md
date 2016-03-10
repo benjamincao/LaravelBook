@@ -9,10 +9,10 @@ Errors & Logging
 * [5.日志](#logging)
 
 <h2 id="introduction">1. 介绍</h2>
-当启动新项目时，错误和异常处理已经配置好了。另外，Laravel跟Monolog这个日志库集成的，这个库提供了大量的功能强大的log处理器。
+当启动新的Laravel项目时，错误和异常处理已经配置好了。另外，Laravel集成了Monolog日志，这个库提供了大量的功能强大的log处理器。
 <h2 id="configuration">2.配置</h2>
 ### Error Detail
-应用通过浏览器显示的错误细节的数量是通过在`config/app.php`中的`debug`配置项控制的。默认情况下，这个配置项是遵从`APP_DEBUG`环境变量的，环境变量保存在`.env`文件中。  
+应用通过浏览器显示的错误细节的数量是通过在`config/app.php`中的`debug`配置项控制的。默认情况下，这个配置项取值为`APP_DEBUG`环境变量，这个变量保存在`.env`文件中。  
 对于开发者，应该将`APP_DEBUG`设置为`true`，在生产环境，应该设置为`false`。
 ### Log Modes
 不需要经过配置，Laravel支持`signle`, `daily`, `syslog`, `errorlog`等几种日志模式。例如，如果需要使用daily日志文件取代single日志文件，只需要将`config\app.php`配置文件中的`log`设置一下就可以。  
@@ -27,13 +27,15 @@ Errors & Logging
 ```php
     $app->configureMonologUsing(function($monolog) {
         $monolog->pushHandler(...);
-});
+    });
+
+    return $app;
 ```
 
 <h2 id="ExceptionHandler">3.异常处理</h2>
 所有的异常都是被`App\Exception\Handler`类来处理的，这个类包含两个方法：`report`和`renderMethod`。
 <h3 id="reportMethod">3.1 Report方法</h3>
-`report`方法用来记录异常，并将异常发送到外部服务，例如`BugSnag`。默认情况下，`report`方法只是简单的将异常传递给记录异常的基础的类。然而，我们可以依据自己的想法来记录所有的异常。   
+`report`方法用来记录异常，或者将异常发送到例如`BugSnag`的外部服务。默认情况下，`report`方法只是简单的将异常传递给记录异常的基础的类。然而，我们可以依据自己的想法来记录所有的异常。   
 例如，如果需要对各种exception单独处理，可以使用PHP的`instanceof`操作符。
 
 ```php
@@ -57,10 +59,10 @@ Errors & Logging
 ```
 
 ### 忽略某些类型的exception
-Handler类的`$dontReport`属性用来记录不需要记录日志的异常类型。默认情况下，404错误的异常不会被记录到log文件中。可以按需添加任何的exception到这个数组中。
+Handler类的`$dontReport`属性用来记录不需要记录日志的异常类型，它是一个数组。默认情况下，404错误的异常不会被记录到log文件中。可以按需添加任何的exception到这个数组中。
 
 <h3 id="renderMethod">3.2 Render方法</h3>
-`render`方法是用来将一个给定的exception转化为一个HTTP响应，并将这个响应返回到浏览器。默认情况下，异常传送给生成响应的一个基类，但是，你也可以根据异常类型不同返回定制的响应。
+`render`方法是用来将一个给定的exception转化为一个HTTP响应，并将这个响应返回到浏览器。默认情况下，异常传送给基类，它生成一个response。但是，你也可以根据异常类型不同返回定制的响应。
 
 ```php
     /**
@@ -87,7 +89,7 @@ Handler类的`$dontReport`属性用来记录不需要记录日志的异常类型
     abort(404);
 ```
 
-`abort`方法会立刻生成一个异常，并被异常处理器的render方法处理。可以提供响应的文字：
+`abort`方法会立刻生成一个异常，并被异常处理器的render方法处理。第二个参数可以设定异常内容：
 
 ```php
     abort(403, 'Unauthorized action.');
